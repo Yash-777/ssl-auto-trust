@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <!--
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║  ssl-auto-trust-spring-boot-starter  v1.0.0                             ║
+  ║  Activation default: DISABLED  (ssl.auto-trust.enabled=false)           ║
+  ║  Enable via property or @EnableSslAutoTrust annotation.                 ║
+  ║  Publishing target: Maven Central via Sonatype Central Portal           ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+  -->
+  <groupId>io.github.yash-777</groupId>
+  <artifactId>ssl-auto-trust-spring-boot-starter</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>
+    Spring Boot starter that auto-trusts ZScaler/corporate-proxy TLS certs.
+    Fixes PKIX path building failed. Default DISABLED — opt-in via
+    ssl.auto-trust.enabled=true or @EnableSslAutoTrust.
+    Java 8+, Spring Boot 2.x, Windows/Linux/macOS.
+  </description>
+  <url>https://github.com/Yash-777/ssl-auto-trust-spring-boot-starter</url>
+  <inceptionYear>2026</inceptionYear>
+  <organization>
+    <name>GitHub OpenSource</name>
+    <url>https://github.com/Yash-777</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>Yash-777</id>
+      <name>Yashwanth</name>
+      <email>yashwanth.merugu@gmail.com</email>
+      <url>https://github.com/Yash-777</url>
+      <organization>N/A</organization>
+      <organizationUrl>https://github.com/Yash-777</organizationUrl>
+      <roles><role>developer</role></roles>
+      <timezone>+5</timezone>
+    </developer>
+  </developers>
+  <scm>
+    <url>https://github.com/Yash-777/ssl-auto-trust-spring-boot-starter</url>
+    <connection>scm:git:https://github.com/Yash-777/ssl-auto-trust-spring-boot-starter.git</connection>
+    <developerConnection>scm:git:https://github.com/Yash-777/ssl-auto-trust-spring-boot-starter.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/Yash-777/ssl-auto-trust-spring-boot-starter/issues</url>
+  </issueManagement>
+  <distributionManagement>
+    <repository>
+      <id>central</id>
+      <name>Maven Central — Sonatype Central Portal</name>
+      <url>https://central.sonatype.com/api/v1/publisher/upload</url>
+    </repository>
+    <snapshotRepository>
+      <id>central</id>
+      <name>Maven Central Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.1.RELEASE</version>
+    <relativePath/>
+  </parent>
+  <properties>
+    <java.version>8</java.version>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- Plugin versions — pinned for reproducible builds -->
+    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+    <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
+    <maven-gpg-plugin.version>3.2.4</maven-gpg-plugin.version>
+    <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+    <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+    <central-publishing-plugin.version>0.9.0</central-publishing-plugin.version>
+    <!--
+      GPG keys NEVER stored here — developer secrets go in ~/.m2/settings.xml:
+        <profile><id>release</id><properties>
+          <gpg.keyname>YOUR_FINGERPRINT</gpg.keyname>
+          <gpg.passphraseServerId>gpg-passphrase</gpg.passphraseServerId>
+        </properties></profile>
+        <servers>
+          <server><id>gpg-passphrase</id>
+            <passphrase>YOUR_GPG_PASSPHRASE</passphrase></server>
+          <server><id>github-scm</id>
+            <username>Yash-777</username>
+            <password>GITHUB_PAT</password></server>
+          <server><id>central</id>
+            <username>SONATYPE_TOKEN_USER</username>
+            <password>SONATYPE_TOKEN_PASS</password></server>
+        </servers>
+    -->
+    <project.scm.id>github-scm</project.scm.id>
+    <sonatype.central.serverId>central</sonatype.central.serverId>
+  </properties>
+  <dependencies>
+    <!-- PROVIDED scope: compile-visible, NOT bundled into published JAR -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- Test scope -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <encoding>UTF-8</encoding>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-configuration-processor</artifactId>
+              <version>${project.parent.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+      <!--
+        maven-jar-plugin: plain ~50 KB library JAR.
+        Automatic-Module-Name: Java 9+ named module support.
+        Spring-Boot-Auto-Configuration-Import: MANIFEST.MF SPI hint.
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>com.github.yash777.sslautotrust</Automatic-Module-Name>
+              <Spring-Boot-Auto-Configuration-Import>
+                com.github.yash777.sslautotrust.autoconfigure.SslAutoTrustAutoConfiguration
+              </Spring-Boot-Auto-Configuration-Import>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <!--
+        WHY spring-boot-maven-plugin skip=true IS MANDATORY FOR A LIBRARY:
+        Without it, the repackage goal creates an executable fat JAR that:
+          1. Bundles Spring/Apache/SLF4J classes → ClassCastException in consumer
+          2. Gets rejected by Maven Central (must not contain Spring classes)
+          3. Inflates artifact from ~50 KB to 15-20 MB
+        skip=true produces the plain library JAR for Maven Central.
+        To run demo locally: mvn spring-boot:run (uses class files, not JAR).
+      -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+      </plugin>
+      <!-- REQUIRED by Maven Central: sources JAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${maven-source-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals><goal>jar-no-fork</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- REQUIRED by Maven Central: javadoc JAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${maven-javadoc-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <doclint>none</doclint>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals><goal>jar</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
+        RELEASE STEPS (run in order):
+          0. Prerequisites: GPG key + Sonatype token + settings.xml (see <properties>)
+          1. mvn clean verify                          — all tests pass?
+          2. mvn release:prepare -DdryRun=true -P release  — dry run
+          3. mvn release:prepare -P release            — tag + version bump
+          4. mvn release:perform -P release            — sign + deploy to Central
+          5. mvn release:rollback                      — if anything fails
+
+        Tag format: ssl-auto-trust-spring-boot-starter/1.0.0
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>${maven-release-plugin.version}</version>
+        <configuration>
+          <tagNameFormat>@{project.artifactId}/@{project.version}</tagNameFormat>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <releaseProfiles>release</releaseProfiles>
+          <goals>deploy</goals>
+          <checkModificationExcludes>
+            <checkModificationExclude>target/</checkModificationExclude>
+            <checkModificationExclude>docs/</checkModificationExclude>
+            <checkModificationExclude>.gitignore</checkModificationExclude>
+            <checkModificationExclude>README.md</checkModificationExclude>
+            <checkModificationExclude>LICENSE</checkModificationExclude>
+            <checkModificationExclude>.project</checkModificationExclude>
+            <checkModificationExclude>.classpath</checkModificationExclude>
+            <checkModificationExclude>.settings/</checkModificationExclude>
+            <checkModificationExclude>.idea/</checkModificationExclude>
+            <checkModificationExclude>*.iml</checkModificationExclude>
+            <checkModificationExclude>.factorypath</checkModificationExclude>
+            <checkModificationExclude>exportedcerts/</checkModificationExclude>
+            <checkModificationExclude>*.7z</checkModificationExclude>
+            <checkModificationExclude>settings.xml</checkModificationExclude>
+          </checkModificationExcludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <!-- GPG: signs .jar, -sources.jar, -javadoc.jar, .pom with .asc files.
+               keyname/passphraseServerId injected from ~/.m2/settings.xml — never hardcoded.
+               pinentry-mode loopback: required for CI/CD, suppresses TTY dialog. -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${maven-gpg-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals><goal>sign</goal></goals>
+                <configuration>
+                  <keyname>${gpg.keyname}</keyname>
+                  <passphraseServerId>${gpg.passphraseServerId}</passphraseServerId>
+                  <gpgArguments>
+                    <arg>--pinentry-mode</arg>
+                    <arg>loopback</arg>
+                  </gpgArguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- Sonatype Central Portal: replaces legacy nexus-staging-maven-plugin.
+               autoPublish=true: no manual Portal UI click needed.
+               waitUntil=published: blocks until live on search.maven.org. -->
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>${central-publishing-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>${sonatype.central.serverId}</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+              <checksums>all</checksums>
+              <deploymentName>${project.artifactId}-${project.version}</deploymentName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

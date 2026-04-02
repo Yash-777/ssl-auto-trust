@@ -1,0 +1,24 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ssl-auto-trust-spring-boot-starter  (Spring Boot 2.x SPI registration)
+#
+# Spring Boot reads this file on startup and auto-registers:
+#   1. The @Configuration class — provides RestTemplate @Bean (disabled by default)
+#   2. The ApplicationListener — early JVM patch at ApplicationEnvironmentPreparedEvent
+#
+# Consumers need ZERO code changes — just add the dependency and set:
+#   ssl.auto-trust.enabled=true
+#
+# Spring Boot 3.x: also reads
+#   META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Auto-registers the @Configuration that produces the RestTemplate @Bean.
+# Guarded by @ConditionalOnProperty(ssl.auto-trust.enabled=true, matchIfMissing=false).
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.yash777.sslautotrust.autoconfigure.SslAutoTrustAutoConfiguration
+
+# Auto-registers the early SSL listener at ApplicationEnvironmentPreparedEvent.
+# The listener itself checks ssl.auto-trust.enabled and exits if false.
+# This means the listener is discovered on every startup but is a no-op by default.
+org.springframework.context.ApplicationListener=\
+  com.github.yash777.sslautotrust.initializer.SslAutoTrustInitializer

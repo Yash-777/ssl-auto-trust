@@ -1,0 +1,57 @@
+{
+  "properties": [
+    {
+      "name": "ssl.auto-trust.enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": false,
+      "description": "Master switch. DEFAULT FALSE — starter does nothing until this is set to true. Enable via ssl.auto-trust.enabled=true or @EnableSslAutoTrust annotation."
+    },
+    {
+      "name": "ssl.auto-trust.domains",
+      "type": "java.util.List<java.lang.String>",
+      "defaultValue": "github.com,api.github.com",
+      "description": "Comma-separated domain list. Accepts full HTTPS URLs (scheme+path stripped), bare hostnames, or host:port entries."
+    },
+    {
+      "name": "ssl.auto-trust.export-dir",
+      "type": "java.lang.String",
+      "defaultValue": "exportedcerts",
+      "description": "Directory (relative to working dir) where .cer files and combined-truststore.jks are written. Created automatically."
+    },
+    {
+      "name": "ssl.auto-trust.truststore-password",
+      "type": "java.lang.String",
+      "defaultValue": "changeit",
+      "description": "Password for the persisted combined-truststore.jks (offline inspection only). Not used at runtime."
+    },
+    {
+      "name": "ssl.auto-trust.default-https-port",
+      "type": "java.lang.Integer",
+      "defaultValue": 443,
+      "description": "TCP port assumed when a domain entry has no explicit port."
+    },
+    {
+      "name": "ssl.auto-trust.connect-timeout-ms",
+      "type": "java.lang.Integer",
+      "defaultValue": 10000,
+      "description": "Socket connect/read timeout in milliseconds for the bootstrap TLS cert-fetch handshake."
+    },
+    {
+      "name": "ssl.auto-trust.rest-template-enabled",
+      "type": "java.lang.Boolean",
+      "defaultValue": true,
+      "description": "When true, registers a RestTemplate @Bean with explicit SSL trust. Set to false if the consuming app provides its own RestTemplate bean."
+    }
+  ],
+  "hints": [
+    {
+      "name": "ssl.auto-trust.domains",
+      "values": [
+        { "value": "github.com",            "description": "Public — good ZScaler test target" },
+        { "value": "api.github.com",        "description": "Public — REST API, different cert chain" },
+        { "value": "google.com",            "description": "Public — broad CA coverage, fast" },
+        { "value": "stackoverflow.com",     "description": "Public — alternative test target" }
+      ]
+    }
+  ]
+}
