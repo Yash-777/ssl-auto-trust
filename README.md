@@ -4,6 +4,11 @@
 [![Java 8+](https://img.shields.io/badge/Java-8%2B-blue)](https://www.java.com)
 [![Spring Boot 2.x](https://img.shields.io/badge/Spring%20Boot-2.x-green)](https://spring.io/projects/spring-boot)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
+[![SSL PKIX Trust](https://img.shields.io/badge/SSL-PKIX%20Trust-brightgreen)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/certpath/CertPathProgGuide.html)
+[![Java Keystore](https://img.shields.io/badge/Java-Keystore-orange)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/SecurityToolsSummary.html)
+[![CA Certificates](https://img.shields.io/badge/CA-Certificates-blue)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/cert3.html)
+[![Enterprise SSL](https://img.shields.io/badge/Trust-Corporate%20Certs-9cf)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/p11guide.html)
+
 
 > **Version: 1.0.0**
 
